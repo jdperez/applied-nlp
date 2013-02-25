@@ -42,6 +42,7 @@ object Cluster {
 
     val points = PointTransformer(opts.transform(),parsedData.map(e => e._3).toIndexedSeq.toIndexedSeq)(parsedData.map(e => e._3).toIndexedSeq)
     val kmeans = new Kmeans(points, DistanceFunction(opts.distance()),fixedSeedForRandom=true)
+    //val kmeans = new Kmeans(points, DistanceFunction(opts.distance()))
     val kmeansOutput = kmeans.run(opts.k())
     if (opts.showCentroids()) kmeansOutput._2.map(e => println(e))
 

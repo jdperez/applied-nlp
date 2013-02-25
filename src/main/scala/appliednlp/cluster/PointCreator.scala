@@ -52,7 +52,6 @@ object SchoolsCreator extends PointCreator {
  */
 object CountriesCreator extends PointCreator {
   val countryRE = """([A-Z]+ [A-Z]+|[A-Z.]+|[-]?\d+[.]\d)""".r
-  //val damnYouCzechRE = """(?:[A-Z]+ [A-Z]+|[A-Z]+|[0-9][0-9]\.[0-9])""".r
   def apply(filename: String) = {
     scala.io.Source.fromFile(filename).getLines
     .map (x => countryRE.findAllIn(x).toArray match {
@@ -77,6 +76,9 @@ class FederalistCreator(simple: Boolean = false) extends PointCreator {
     val allArticles = articles.map(elem => elem("text")).mkString
     val allWords = SimpleTokenizer(allArticles).filter(e => !e.matches("[().'\",:;]")).map(e => e.toLowerCase)
     val wordList = allWords.distinct
+    val numWords = allWords.size.toDouble
+    val freqWords = wordList.filter(x => allWords.count(_ == x)/numWords > 0.00005)
+    if (!simple) println("Feature vector size: "+freqWords.size)
     articles.map(elem => {
       val tokens = SimpleTokenizer(elem("text"))
       val count = 
@@ -84,11 +86,10 @@ class FederalistCreator(simple: Boolean = false) extends PointCreator {
           extractSimple(tokens)
         }
         else {
-          val x = extractFull(tokens, wordList)
-          //println(x)
+          //val x = extractFull(tokens, wordList)
+          val x = extractFull(tokens, freqWords)
           x
         }
-      //println(count(0).numDimensions) 
       (elem("id"),elem("author"),count(0))
     }).toIterator
   }
@@ -119,18 +120,14 @@ class FederalistCreator(simple: Boolean = false) extends PointCreator {
    *              FederalistArticleExtractor).
    */
   def extractFull(articleTokens: IndexedSeq[String], wordList:IndexedSeq[String]): IndexedSeq[Point] = {
-    //val x = wordList.map(word => Point(IndexedSeq(getWordCount(word,texts.toList))))
-    //x
-    IndexedSeq(Point(getWordCount(articleTokens,wordList)))
+    val norm = Point(getWordCount(articleTokens,wordList)).norm
+    IndexedSeq(Point(getWordCount(articleTokens,wordList).map(e => e/norm)))
+    //IndexedSeq(Point(getWordCount(articleTokens,wordList)))
   }
 
 
   def getWordCount(tokens:IndexedSeq[String], wordList: IndexedSeq[String]): IndexedSeq[Double] = {
-    //(wordList.count(_ == tokens).toDouble)
-    (wordList.map(x => {
-        
-      tokens.filter(_ == x).size.toDouble
-    }))
+    (wordList.map(x => tokens.filter(_ == x).size.toDouble))
   }
 }
 
