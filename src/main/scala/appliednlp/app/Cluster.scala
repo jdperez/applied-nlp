@@ -27,10 +27,30 @@ object Cluster {
     Logger.getRootLogger.setLevel(logLevel)
     
     // Your code starts here. You'll use and extend it during every problem.
+    val inputfile = opts.filename()
+    val parsedData =
+      if (opts.features() == "schools") 
+        SchoolsCreator(inputfile).toList
+      else if (opts.features() == "countries")
+        CountriesCreator(inputfile).toList
+      else if (opts.features() == "fed-simple")
+        new FederalistCreator(true).apply(inputfile).toList
+      else if (opts.features() == "fed-full")
+        new FederalistCreator(false).apply(inputfile).toList
+      else
+        DirectCreator(inputfile).toList
 
+    val points = PointTransformer(opts.transform(),parsedData.map(e => e._3).toIndexedSeq.toIndexedSeq)(parsedData.map(e => e._3).toIndexedSeq)
+    val kmeans = new Kmeans(points, DistanceFunction(opts.distance()),fixedSeedForRandom=true)
+    val kmeansOutput = kmeans.run(opts.k())
+    if (opts.showCentroids()) kmeansOutput._2.map(e => println(e))
 
+    val centroidIndxs = kmeans.computeClusterMemberships(kmeansOutput._2)
+    val clusterReport = if (opts.report()) ClusterReport(parsedData.map(e => e._1).toSeq, parsedData.map(e => e._2).toSeq, centroidIndxs._2) 
+
+    val ccMatrix = ClusterConfusionMatrix(parsedData.map(e => e._2).toIndexedSeq, opts.k(), centroidIndxs._2)
+    println(ccMatrix)
   }
-
 }
 
 

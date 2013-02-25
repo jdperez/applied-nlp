@@ -23,8 +23,9 @@ trait PointCreator extends (String => Iterator[(String,String,Point)])
  */
 object DirectCreator extends PointCreator {
 
- def apply(filename: String) = List[(String,String,Point)]().toIterator
-
+ def apply(filename: String) = {
+   scala.io.Source.fromFile(filename).getLines.map(x => x.split("\\s+") match {case Array(a,b,c,d) => (a,b,Point(IndexedSeq(c.toDouble,d.toDouble)))})
+ }
 }
 
 
@@ -34,8 +35,15 @@ object DirectCreator extends PointCreator {
  */
 object SchoolsCreator extends PointCreator {
 
-  def apply(filename: String) = List[(String,String,Point)]().toIterator
-
+  def apply(filename: String) = {
+    scala.io.Source.fromFile(filename).getLines.toList
+    .flatMap(x => x.split("\\s\\s+") match {
+        case Array(school,read4,math4,read6,math6) => 
+          List((school.replace(" ","_")+"_4th","4",Point(IndexedSeq(read4.toDouble,math4.toDouble)))) ++  
+          List((school.replace(" ","_")+"_6th","6",Point(IndexedSeq(read6.toDouble,math6.toDouble))))
+        })      
+    .toIterator 
+  }
 }
 
 /**
@@ -43,9 +51,16 @@ object SchoolsCreator extends PointCreator {
  * into a format suitable for input to RunKmeans.
  */
 object CountriesCreator extends PointCreator {
-
-  def apply(filename: String) = List[(String,String,Point)]().toIterator
-
+  val countryRE = """([A-Z]+ [A-Z]+|[A-Z.]+|[-]?\d+[.]\d)""".r
+  //val damnYouCzechRE = """(?:[A-Z]+ [A-Z]+|[A-Z]+|[0-9][0-9]\.[0-9])""".r
+  def apply(filename: String) = {
+    scala.io.Source.fromFile(filename).getLines
+    .map (x => countryRE.findAllIn(x).toArray match {
+    //.map (x => x.split("""([A-Z ]+ |[0-9][0-9]\.[0-9])""") match {
+        case Array(country, birthRate, deathRate) =>
+          (country.replace(" ","_"), "1", (Point(IndexedSeq(birthRate.toDouble, deathRate.toDouble))))
+        })
+  }  
 }
 
 /**
@@ -57,7 +72,26 @@ object CountriesCreator extends PointCreator {
  */
 class FederalistCreator(simple: Boolean = false) extends PointCreator {
 
-  def apply(filename: String) = List[(String,String,Point)]().toIterator
+  def apply(filename: String) = {
+    val articles = FederalistArticleExtractor(filename)
+    val allArticles = articles.map(elem => elem("text")).mkString
+    val allWords = SimpleTokenizer(allArticles).filter(e => !e.matches("[().'\",:;]")).map(e => e.toLowerCase)
+    val wordList = allWords.distinct
+    articles.map(elem => {
+      val tokens = SimpleTokenizer(elem("text"))
+      val count = 
+        if (simple) {
+          extractSimple(tokens)
+        }
+        else {
+          val x = extractFull(tokens, wordList)
+          //println(x)
+          x
+        }
+      //println(count(0).numDimensions) 
+      (elem("id"),elem("author"),count(0))
+    }).toIterator
+  }
 
   /**
    * Given the text of an article, compute the frequency of "the", "people"
@@ -70,7 +104,10 @@ class FederalistCreator(simple: Boolean = false) extends PointCreator {
    *              FederalistArticleExtractor).
    */
   def extractSimple(texts: IndexedSeq[String]): IndexedSeq[Point] = {
-    Vector[Point]()
+    val theCnt = texts.filter(e => e.toLowerCase == "the").size
+    val peopleCnt = texts.filter(e => e.toLowerCase == "people").size
+    val whichCnt = texts.filter(e => e.toLowerCase == "which").size
+    IndexedSeq(Point(IndexedSeq(theCnt.toDouble,peopleCnt.toDouble,whichCnt.toDouble)))
   }
 
   /**
@@ -81,10 +118,20 @@ class FederalistCreator(simple: Boolean = false) extends PointCreator {
    *              for an article (i.e. the "text" field produced by
    *              FederalistArticleExtractor).
    */
-  def extractFull(texts: IndexedSeq[String]): IndexedSeq[Point] = {
-    Vector[Point]()
+  def extractFull(articleTokens: IndexedSeq[String], wordList:IndexedSeq[String]): IndexedSeq[Point] = {
+    //val x = wordList.map(word => Point(IndexedSeq(getWordCount(word,texts.toList))))
+    //x
+    IndexedSeq(Point(getWordCount(articleTokens,wordList)))
   }
 
+
+  def getWordCount(tokens:IndexedSeq[String], wordList: IndexedSeq[String]): IndexedSeq[Double] = {
+    //(wordList.count(_ == tokens).toDouble)
+    (wordList.map(x => {
+        
+      tokens.filter(_ == x).size.toDouble
+    }))
+  }
 }
 
 object FederalistArticleExtractor {
