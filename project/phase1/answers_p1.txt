@@ -1,30 +1,91 @@
 #### 1
 
 Your '-anlp' twitter account:
-
+jperez_anlp
 The unique 'id' of your tweet: 
+296391837936152580
 
 #### 2
 
 Provide the last five lines of extracted100.txt:
+SleikAmber 121 Happy 10th birthday Austin!!!!!!  Love you!!!  &lt;3 http:\/\/t.co\/GbZ3OfZ1
+Chase_Varhol 223 Feeling bad I can't make it down to southern for Austin's birthday party. Sorry @Madi_Shields :(
+AustinMJustinB 1655 I don't like Austin mahomo \u2014 Cool, as long as you like AUSTIN MAHONE I don't care http:\/\/t.co\/pVhBT3jS
+ThatBoyAztec 1119 Which one of you sons of bitches killed my future ex wife - Steve Austin #Haha
+vashappeninpes 1365 OMG QUANT'\u00c9 FRESCO AUSTIN MAHONE.
 
 #### 3
 
 Provide the output for processing extracted100.txt:
+Tokens:
+Austin:53 the:29 to:25 in:23 a:18 for:16 of:14 I:14 you:11 -:11 
+Hashtags:
+#txlege:1 #hurry:1 #halfbirthday:1 #comeatme:1 #austin:1 #atx:1 #arlington:1 #Yuck:1 #Yikes:1 #Years:1 
+Mentions:
+@AustinMahone:7 @Yale_basketball:2 @zdaeefron:1 @xbouncer3d:1 @wale:1 @trudydarwin:1 @taylormaclaine:1 @susandwhisnant):1 @stromdwick:1 @stromb3rgblvd:1
+
 
 #### 4
 
 Provide the output for streaming from the Twitter API:
 
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 2377k    0 2377k    0     0  95600      0 --:--:--  0:00:25 --:--:-- 97070
+Number of tweets seen: 1000
+
+
+[Batch] #FF:7 #TeamFollowBack:3 #khk:2 #countkun:2 #Pisces:2 #yaoming:1 #whattosayaftersex:1 #whatifcamera:1 #whatever:1 #ueDA:1 
+
+
+[Global] #FF:7 #TeamFollowBack:3 #khk:2 #countkun:2 #Pisces:2 #yaoming:1 #whattosayaftersex:1 #whatifcamera:1 #whatever:1 #ueDA:1 
+
+
+100 4825k    0 4825k    0     0  97922      0 --:--:--  0:00:50 --:--:-- 94304
+Number of tweets seen: 2000
+
+
+[Batch] #TEAMFOLLOWBACK:3 #ff:2 #INSTANTFOLLOWBACK:2 #FebruaryWishes:2 #FOLLOWBACK:2 #FF:2 #yafeelme:1 #weeshortday:1 #wapol:1 #voetbal:1 
+
+
+[Global] #FF:9 #TeamFollowBack:4 #TEAMFOLLOWBACK:4 #ff:3 #khk:2 #iPad:2 #countkun:2 #auspol:2 #TFBJP:2 #Pisces:2 
+
+
+100 7196k    0 7196k    0     0  98965      0 --:--:--  0:01:14 --:--:-- 93734
+Number of tweets seen: 3000
+
+
+[Batch] #saudi:4 #qatif:4 #ksa:4 #\u0627\u0644\u0643\u0648\u064a\u062a:4 #\u0627\u0644\u0633\u0639\u0648\u062f\u064a\u0629:4 #RT:3 #soydelPP:2 #belleza:2 #\u0635\u0648\u0631:2 #TEAMFOLLOWWACK:2 
+
+
+[Global] #FF:9 #TEAMFOLLOWBACK:6 #TeamFollowBack:5 #saudi:4 #qatif:4 #ksa:4 #ff:4 #\u0627\u0644\u0643\u0648\u064a\u062a:4 #\u0627\u0644\u0633\u0639\u0648\u062f\u064a\u0629:4 #RT:4 
+
+
+100 9645k    0 9645k    0     0    98k      0 --:--:--  0:01:38 --:--:--  108k
+Number of tweets seen: 4000
+
+
+[Batch] #FF:3 #countkun:2 #yum:1 #yikes:1 #whatarolemodel:1 #webcamtoy:1 #vithaputeri:1 #vg:1 #typicalmale:1 #traumatic:1 
+
+
+[Global] #FF:12 #TeamFollowBack:6 #TEAMFOLLOWBACK:6 #ff:5 #countkun:5 #saudi:4 #qatif:4 #ksa:4 #\u0627\u0644\u0643\u0648\u064a\u062a:4 #\u0627\u0644\u0633\u0639\u0648\u062f\u064a\u0629:4 
+
+
+100 11.7M    0 11.7M    0     0  99132      0 --:--:--  0:02:04 --:--:-- 86707
+Number of tweets seen: 5000
+
+
+[Batch] #UJRAGBeerTent:9 #RecuerdosDelColegio:3 #FF:3 #shos:2 #yahalashow:1 #wanko:1 #walksafe:1 #voorjaar:1 #toronto.:1 #tipsy:1 
+
+
+[Global] #FF:15 #UJRAGBeerTent:9 #TEAMFOLLOWBACK:7 #countkun:6 #TeamFollowBack:6 #saudi:5 #qatif:5 #ff:5 #\u0627\u0644\u0633\u0639\u0648\u062f\u064a\u0629:5 #RecuerdosDelColegio:5 
+
 
 Provide any hashtags that you found that were also trending on Twitter:
-
+I found two hashtags from my output that are trending are #WhatToSayAfterSex and #SometimesYouHaveTo. My faith-in-humanity bar is blinking red :/ 
 
 #### Extra
 
 Discuss what you did, including any additional programs you wrote and how to run them (if that is straightforward enough), and a discussion of the output you obtained.
-
-
-
 
 
