@@ -41,20 +41,20 @@ def checkRegister (regex: Regex, input: String, value: String) = {
 // regular expressions for each problem in 2.1 in the triple quotes
 // for the Regex variable E1, E2, ... E7 corresponding to the problem.
 
-val E1 = """""".r
+val E1 = """[a-zA-Z]+""".r
 
-val E2 = """""".r
+val E2 = """[a-zA-Z]*b+""".r
 
-val E3 = """""".r
+val E3 = """([a-zA-Z]+)\s+\1""".r
 
-val E4 = """""".r
+val E4 = """([b]+([a][b])?)*""".r
 
 // For this one, assume that a "word" is a sequence of uppercase or lowercase letters
-val E5 = """""".r
+val E5 = """^[0-9]+(.*[a-zA-Z]+)+""".r
 
-val E6 = """""".r
+val E6 = """.*(\braven\b.*\bgrotto\b|\bgrotto\b.*\braven\b).*""".r
 
-val E7 = """""".r
+val E7 = """^([a-zA-Z]+)[ ,.-]+.*""".r
 
 
 

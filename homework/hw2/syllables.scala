@@ -6,11 +6,32 @@ I did not dare to go back towards the pit, but I felt a passionate longing to pe
 
 // Start your work here. Don't change the lines that print Part (a), etc.
 
+val oneSyllableRegex = """\b+[bcdfghjklmnpqrstwxyzBCDFGHJKLMNPQRSTVWXYZ]*[aeiouAEIOU]+[bcdfghjklmnpqrstwxyzBCDFGHJKLMNPQRSTVWXYZ]*\b+""".r
+
 // Part (a)
 println("\nPart (a)")
+val words = oneSyllableRegex.findAllIn(wotwRaw)
+println("Number of one syllable words on full String: " + words.toList.size)
+
 
 
 // Part (b)
 println("\nPart (b)")
+val wotwList = wotwRaw.split(" +|\n").toList
+val oneSyllableListRegex = """[bcdfghjklmnpqrstwxyzBCDFGHJKLMNPQRSTVWXYZ]*[aeiouAEIOU]+[bcdfghjklmnpqrstwxyzBCDFGHJKLMNPQRSTVWXYZ]*[.?,]*""".r
 
-
+var cnt = 0
+for (i <- 0 until wotwList.size){
+  if (wotwList(i).contains("-")){
+    val hyphenWord = wotwList(i).split("-").toList.foreach (
+      x => if (oneSyllableListRegex.pattern.matcher(x).matches)
+        cnt += 1
+    )
+  }
+  else {
+    if (oneSyllableListRegex.pattern.matcher(wotwList(i)).matches){
+      cnt += 1
+    }
+  }
+}
+println("Number of one syllable words on split String: "+ cnt)

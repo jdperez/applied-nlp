@@ -1,5 +1,5 @@
 Homework 3 Answers
-Name:
+Name:Joseph Perez
 
 
 
@@ -7,16 +7,26 @@ Problem 4
 
 
 Part (d)
+    325 Mrs. Eddy
+    211 Mrs. Clemens
+    132 Mr. Clemens
+     64 Mr. Rogers
+     62 Mr. Bolton
+     61 Mr. Bixby
+     47 Miss Hawkins
+     44 Mr. Braham
+     43 Mr. Buckstone
+     41 Mrs. Jane Clemens
 
-
+I got 16 as the count for "Mr. Twain"
 
 Part (e)
 
-
+I think the most common problem I saw with my regex was "Rev. Mr" or "Rev. Dr" as being consider a match. This is because in my regex, I am looking for either a "title. first_name", "title. first_name", or "title. first_name MI. last_name". This particular pattern was matching with my first case. I could have added a constraint to handle these types of names, but I wanted to focus on problem 5 instead.
 
 Problem 5
 
 
 Part (b)
-
+There are two articles named "FEDERALIST No. 70", and since we are doing split on the text, the string prior to " FEDERALIST. No. 1" counts as an element in the array. 
 
