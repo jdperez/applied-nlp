@@ -1,0 +1,147 @@
+Applied-NLP, Homework 3 Answers
+
+Name: Joseph Perez
+EID: jdp538
+
+Link to applied-nlp fork: https://github.com/jdperez/applied-nlp
+
+--------------------------------------------------------------------------------
+
+Problem 1
+
+Part (b): Provide the requested output.
+anlp app Cluster -k 3 clusters_equal_variance.dat
+
+--------------------------------------------------------------------------------
+Confusion matrix.
+Columns give predicted counts. Rows give gold counts.
+--------------------------------------------------------------------------------
+3   43  4   | 50  [1]
+30  0   0   | 30  [2]
+0   0   20  | 20  [3]
+-------------------------
+33  43  24
+[0] [1] [2]
+
+Problem 2
+
+* Provide th command line call and the output.
+anlp app Cluster -k 3 -d  euclidean -t z clusters_bigger_x_variance.dat 
+
+--------------------------------------------------------------------------------
+Confusion matrix.
+Columns give predicted counts. Rows give gold counts.
+--------------------------------------------------------------------------------
+0   46  4   | 50  [1]
+3   2   25  | 30  [2]
+17  0   3   | 20  [3]
+-------------------------
+20  48  32
+[0] [1] [2]
+
+
+Problem 3
+
+Part (a): Provide the clusters and any comments.
+[3.5962962962962957,3.7629629629629626]
+[5.486956521739131,5.482608695652174]
+
+Based on centroids, the majority of schools were performing below average in 4th and 6th grades.
+
+Part (b): Discuss outliers.
+The outliers appear to represent those schools who performed noticeably higher or lower than the other schools with regard to the reading and math scores for that grade. For Example, EDGEWOOD 4th grade reading and math scores were 5.2 and 4.9, respectively, whereas the rest of the schools scored typically under 4.0 for reading and math.  
+
+Part (c): Your interpretation for output when k=4.
+
+[5.45,5.47]
+[3.2777777777777777,3.4388888888888887]
+[7.1,6.3]
+[4.370588235294117,4.68235294117647]
+[Label: 4] <=> [Cluster: 1]
+Ids: BALDWIN_4th  BARNARD_4th BRENNAN_4th CLINTON_4th CONTE_4th DAY_4th DWIGHT_4th  EDWARDS_4th  IVY_4th KIMBERLY_4th  LINCOLN_BASSETT_4th PRINCE_4th  SCRANTON_4th  SHERMAN_4th TRUMAN_4th  WEST_HILLS_4th  WINCHESTER_4th  WOODWARD_4th
+
+[Label: 4] <=> [Cluster: 0]
+Ids: EDGEWOOD_4th HOOKER_4th
+
+[Label: 6] <=> [Cluster: 0]
+Ids: BARNARD_6th  CLINTON_6th EDWARDS_6th HALE_6th  LOVELL_6th  ROSS_6th  SHERMAN_6th WEST_HILLS_6th
+
+[Label: 6] <=> [Cluster: 2]
+Ids: BEECHER_6th  DAVIS_6th EDGEWOOD_6th  HOOKER_6th  WOODWARD_6th
+
+[Label: 6] <=> [Cluster: 3]
+Ids: BALDWIN_6th  BRENNAN_6th CONTE_6th DAY_6th DWIGHT_6th  IVY_6th KIMBERLY_6th  LINCOLN_BASSETT_6th  PRINCE_6th  SCRANTON_6th  TRUMAN_6th  WINCHESTER_6th
+
+[Label: 4] <=> [Cluster: 3]
+Ids: BEECHER_4th  DAVIS_4th HALE_4th  LOVELL_4th  ROSS_4th
+
+--------------------------------------------------------------------------------
+Confusion matrix.
+Columns give predicted counts. Rows give gold counts.
+--------------------------------------------------------------------------------
+2  18  0   5   | 25  [4]
+8  0   5   12  | 25  [6]
+---------------------------------
+10  18  5 17
+[0] [1] [2] [3]
+
+Cluster 0 represents the highest scoring scores for 4th grade. Cluster 1 represents the general below average grades for 4th grade. Cluster 2 are the highest scores for 6th grade schools. Cluster 3 are the average scores for 6th grade as well as above average scores for 4th grade.  
+
+Problem 4
+
+* Describe what you found.
+Initially I tried small clusters using euclidean distance, and the output of the clusters didn't seem to explain how each country was being clustered together. Then I tried using different transformations such as zscore. After using this transformation along with a larger value for k, I started to see a pattern emerge. This was my command that I used which found interesting results. 
+anlp app Cluster -k 10  -d e -r -t z -f countries birth.dat 
+
+The countries that were being clustered together seemed to have resembling traits. For instance, one cluster was composed of Taiwan, Hong Kong, Malaysia, and the Philippines. These countries all have relatively the same birth and date rate (30.0-40.0 for birth rate, 6.0-15.0 for death rate). The other clusters had relatively the same trend occurring as well. 
+
+
+Problem 5
+
+* Describe result of using z-score transform on the simple features.
+--------------------------------------------------------------------------------
+Confusion matrix.
+Columns give predicted counts. Rows give gold counts.
+--------------------------------------------------------------------------------
+2   0   9   40  | 51  [HAMILTON]
+0   0   1   2   | 3   [HAMILTON AND MADISON]
+0   1   0   4   | 5   [JAY]
+0   3   1   7   | 11  [HAMILTON OR MADISON]
+0   3   10  2   | 15  [MADISON]
+---------------------------------
+2 7 21  55
+[0] [1] [2] [3]
+
+
+I think the results are roughly the same whether a z-score transformation is used or not. For instance, there are more articles attributed to Hamilton in cluster 3, but almost all the articles for Jay are in that cluster as well. In cluster 2, the majority of articles for madison are in the same cluster as 9 of the articles for hamilton. Cluster 2 in my output resembles cluster 3 in the output when there are no transformations. 
+
+Problem 6
+Here are the best results I found using my features.
+--------------------------------------------------------------------------------
+Confusion matrix.
+Columns give predicted counts. Rows give gold counts.
+--------------------------------------------------------------------------------
+12  0   38  1   | 51  [HAMILTON]
+0   0   0   3   | 3   [HAMILTON AND MADISON]
+0   5   0   0   | 5   [JAY]
+2   0   1   8   | 11  [HAMILTON OR MADISON]
+0   0   1   14  | 15  [MADISON]
+----------------------------------
+14  5 40  26
+[0] [1] [2] [3]
+
+Here was the command I used to generate this data.
+anlp app Cluster -k 4 -f fed-full  -d c federalist.txt
+
+These are much better than the results from problem 5, however they are not as good as the results you obtained. Intially, I started by defining my features to be unigrams where the feature vector was every single unique word that occurred in the federalist papers. This was a vector with roughly 8k elements. Using euclidean distance, I was getting slightly better results than problem 5. I then tried different distance functions and compared their results. I found the cosine distance function to be the most beneifical to the clustering performance of authors.
+I then tried different transformations to see if they would improve clustering as well. Because of my large feature vector (and the limitied capability of my laptop), I was unable to transform the data using z-score or pca due to a Java runtime error. As a result, I decided to decrease the size of my feature vector to see if the clustering accuracy would increase. I significantly decreased the size of my feature vector based on the occurance of a unigram in the entire text. If the number of occurrances of a particular word divided by all the words in the text was greater than a specified threshold, the word was then considered part of the feature vector. 
+This led a more accurate clustering, but it was still far from perfect. I was using a raw counts of unigrams for each article. I decided to change the value of the unigram. The value was then the raw count of a unigram divided by the feature vector norm of the corresponding article. This led to much better results with regards to accuracy of the clustering. I then tried to augment additional features to this vector such as word length and sentence length, but the performance didn't seem to improve. I also tried using a random seed instead of a fixed seed, but this led to lower performance on average compared to using a fixed seed. I did not use PCA or z-score because my feature vector was still too large (~ 1K elements) and it would cause runtime errors when I tried to do the transformation. I found that around 1K features was giving me the best accuracy in clustering because when I would increase my threshold of unigrams allowed in the feature vector, the performance began to decrease. 
+I have a question about this problem. You mentioned that this would be a bad methodolgy if we were trying to make a scientific point about authorship. What would be a good methodology if a scientific point on authorship attribution was our goal? Also, would it be possible to see your solution to this problem? I am very interested in viewing your implementation that led to great results.
+
+Problem 7
+
+
+
+
+
+
