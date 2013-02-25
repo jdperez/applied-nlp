@@ -28,10 +28,14 @@ args match {
 // are correct, so you don't need to worry about that.
 
 // Initialize variables num1, op and num2 based on the values in the args array.
+val num1 = args(0).toInt
+val op = args(1)
+val num2 = args(2).toInt
 
 // Obtain a result by using the string name of the operator to choose
 // which arithmetic operation to use.
-
+val result = if (op == "plus") num1 + num2 else if (op == "minus") num1 - 
+num2 else if (op == "times") num1 * num2.toDouble else num1 / num2.toDouble
 // Print the result.
-
+println(num1 + " " + op + " " + num2 + " = " + result)
 
