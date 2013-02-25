@@ -1,34 +1,42 @@
-Name: 
-EID: 
+Name: Joseph Perez 
+EID: jdp538
 
 #### 1
 
 * List the last five tweets from Austin, San Francisco, and New York City.
+@markschaffer cool!
+Este verso es pa'tu abuelo y los que llevan tu sangre...Agarrados de la mano....Todos a su madre!
+That moment when @AyeMel_ is gay
+@lyssadaniellex3 [my sources say: No]
+@NevSchulman I love you! Why are you so mean!
 
 
 #### 2
 
 The address for your Github fork: 
-
+https://github.com/jdperez/tshrdlu
 
 #### 3
 
 Show the command line calls requested.
 
 * follow @wired, @theeconomist, @nytimes, and @wsj
+tshrdlu run tshrdlu.twitter.IdStreamer 1344951 5988062 807095 3108351
 
 * search for scala, java and python
+tshrdlu run tshrdlu.twitter.TermStreamer scala java python
 
 * search the bounding boxes around Austin, San Francisco, and New York City
-
+tshrdlu run tshrdlu.twitter.LocationStreamer -97.8 30.25 -97.65 30.35 -122.75 36.8 -121.75 37.8 -74 40 -73 41
 
 #### 4
 
 * Authorization description
-
+The OAuth credientials from twitter are grabbed via the environment variables. These are then added to the java command line via the flag -Dtwitter4j.oauth which sets the consumer and accessToken key and secret.
 
 * Code description
-
+Authentication.scala contains the object which sets the OAuth credientials which are provided through the flag -Dtwitter4j.oauth. Listener.scala contains the class which allows us to print the text of the tweet through the status. StreamingApp.scala contains the class which creates a twitter stream by getting an instance through the TwitterStreamFactory. This stream allows us to get tweets, but in order to do anything with them, we have to register a listener to it. This is what's done in the BaseStreamer so the text from the tweet can be found. 
+There is an abstract class called FilteredStreamer which extends BaseStreamer. This class allows you to filter tweets based on arguments passed on the command line. There are also objects which extend the FilteredStreamer like IdStreamer, TermStreamer, and LocationStreamer. These are mixin compostions of the FilteredStreamer class and the traits from Query.scala. In Query.scala, the trait Filterable sets up the base trait for each of the mixins from StreamingApp.scala, each which filter differently based on either location, terms, or id. The QueryBuilder object is designed to setup different FilterQuery objects for IdFilter, TermFilter, and LocationFilter which is the return value of the function defiend in these traits.
 
 * Questions
 
@@ -36,18 +44,59 @@ Show the command line calls requested.
 #### 5
 
 * What you did to isEnglish
-
+I took your advice and first modified the SimpleTokenizer to remove non-word items like hashtags and mentions. Then I used the English class in LanguageUtil.scala to get the English wordset. Once I had that, I created a regex to match for a word in the wordset. This was done outside isEnglish() since it needs to be initialized only once. Inside isEnglish(), I used the SimpleTokenizer to get the word tokens from the tweet. For each token, I determine if it exists in the wordset. If it does, I simply increment my counter. Once I've iterated through every token, I check if the count divided by the total number of tokens is greater than 50%. If true, the tweet is considered English, otherwise it's labeled as "other". 
 
 * Accuracy and description
+[ENGLISH] “@Sincerely_Kel: I'll be in my bed all day unless someone loves me enough to ask me to do something.” RT
+[OTHER]   A bailee.
+[OTHER]   @lilChulooo 🏃💨
+[ENGLISH] I know, I konw it's not your time but byebye
+[OTHER]   @Marshmallowkup ห้ามหายไปไหนด้วย :(
+[ENGLISH] @_LovelyANicole nobody cares you chicken head
+[ENGLISH] Who's sick? 😞✋
+[ENGLISH] Of the 20 films in competition at #Berlinale, 14 remain without North American distribution http://t.co/m0xBDML3
+[OTHER]   You're perf.👌
+[OTHER]   ka irritant dit
+[ENGLISH] There's only ONE Justin Bieber and theres only ONE Austin Mahone. Stop comparing them theyre two different people.
+[ENGLISH] @miciahboo16 I'm comin over in 20 ! We needs to talk lmao kapeesh? Kapeesh!
+[OTHER]   KafkasKartalı ŞeyhŞamil http://t.co/7RKtHxRq
+[OTHER]   ここ数日の記憶が無い。
+[OTHER]   Vanavond uit eten
+[OTHER]   #todoxqrias 
+Pendejo Campeón Nadie le gana en hacer pendejadas Pendejo Alegre Se ríe de cualquier pendejada
+[ENGLISH] @onedirection #1DFollowSpree FOLLOW ME PLEASE PLEASE I LOVE YOUUUUUUUUUU SO MUCH <3 I'M EXCITED PLEASE <3  23X
+[ENGLISH] RT @Finally_Fendi: In order for you to insult me, I would first have to value your opinion.
+[ENGLISH] @NiallOfficial PLEASE FOLLOW ME @MarlonTommo !!!! PLEASE PLEASE PLEASE. GOT TWEETLIMIT #17
+[OTHER]   @riiichan05 あぁーまっちゃんあと4分ー！( *◯ω◯)
 
+
+10/10 correctly matched for [ENGLISH]
+8~9/10 correctly matched for [OTHER] //I don't know if the 3rd tweet counts as English or not.
+I did not take into consideration hashtags as tokens. Maybe that would have helped to improve my accuracy by splitting the hashtag into tokens between captialze letters.
 
 #### 6
 
 * Summary output
-
+----------------------------------------
+Number of English tweets processed: 300
++ - ~
+72.0  62.0  166.0
+24  20.67 55.33
+----------------------------------------
 
 * List ten tweets and say whether their labels are correct.
+~: RT @iThinkStyles: maybe the boys don't follow you after spamming them asking for a follow because they say to themselves "I'm marrying t ...
++: Happy #ManCandyMonday @BeauBennett78 http://t.co/jqPg6eVf
++: RT @TheTweetOfGod: Yes, there is a warrant out for the Pope's arrest. But it was issued by the fashion police for dressing "like Elton J ...
+~: The way I see it, if you want the rainbow, you gotta put up with the rain.
+-: RT @TheMindBlowing: In London, there's a "rain room" that makes rain fall everywhere in the room except the spot you're standing in!
++: RT @IBeShaunaxo: Roc would look good with anyone
+~: @sinyeeeeeeee really V
+~: "@iLifeQuotess: Shortest horror story: Today is Monday."
++: RT @nectar: #comp RT & follow @nectar for a chance to win points & a £100 @thebodyshopuk gift card! More info: http://t.co/u2xERl2c
+~: RT @caitybabyxo: I want you
 
+I think the labels are correct except for maybe the @iLifeQuotess tweet with the word "horror". That seems like it should have been negative rather than neutral. Also in the last tweet, "I want you" seems like a positive sentiment? It could be viewed as creepy, too. Increasing the wordset for positive and negative words would help. Also, taking context into consideration would be beneifical, but I have no idea how to implement that.
 
 * Remarks on anything extra you did.
 
@@ -55,12 +104,32 @@ Show the command line calls requested.
 #### 7
 
 * Give each of the terms you compared and their summary output.
+summary output for the term "monday"
+----------------------------------------
+Number of English tweets processed: 100
++ - ~
+33.0  17.0  50.0
+33  17  50
+----------------------------------------
+
+summary output for the term "friday"
+----------------------------------------
+Number of English tweets processed: 100
++ - ~
+39.0  14.0  47.0
+39  14  47
+----------------------------------------
 
 
 #### 8
 
 * Summary output for the three cities.
-
+----------------------------------------
+Number of English tweets processed: 150
++ - ~
+44.0  39.0  67.0
+29.33 26  44.67
+----------------------------------------
 
 #### Extra
 
