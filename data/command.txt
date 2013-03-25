@@ -1,0 +1,26 @@
+for f in 1000 2000 3000 4000 5000 6000 7000 8000 9000 10000 11000 12000 13000 14000 15000 16000 17000 18000 19000 20000 21000 22000 23000 24000 25000 26000 27000 28000 29000 30000
+do echo $f
+echo "Training Random..."
+nak classify --train part5_random/random_$f --eval part5_data_test > results/random_accuracy_$f
+echo "Training Active..."
+nak classify --train part5_activeLearning/training --eval part5_data_test > results/active_accuracy_$f
+echo "Training Candidates..."
+nak classify --train part5_activeLearning/training --eval part5_cand/candidates --predictfile part5_candidate_conf.txt
+echo "Selecting Candidates..."
+anlp run appliednlp.classify.SelectCandidates part5_candidate_conf.txt part5_cand/candidates >> part5_activeLearning/training
+done
+
+for f in 1000 2000 3000 4000 5000 6000 7000 8000 9000 10000 11000 12000 13000 14000 15000 16000 17000 18000 19000 20000 21000 22000 23000 24000 25000 26000 27000 28000 29000
+do echo $f >> lineCounts
+done
+
+
+for f in 1000 2000 3000 4000 5000 6000 7000 8000 9000 10000 11000 12000 13000 14000 15000 16000 17000 18000 19000 20000 21000 22000 23000 24000 25000 26000 27000 28000 29000
+do paste random_accuracy_$f active_accuracy_$f | sed 's/Accuracy: /'$f' /g' - >> finalResults.txt
+done
+cut finalResults.txt -f 1,2,4 -d ' '
+
+
+
+
+
