@@ -112,9 +112,52 @@ class ExtendedFeatureExtractor(bitvectors: Map[String, BitVector])
     val basicFeatures = BasicFeatureExtractor(verb, noun, prep, prepObj)
 
     // Extract more features
+    def getForm(value: String) = if(value matches """^[0-9]+(,[0-9]+)*(\.[0-9]*)*$""") "<number>"
+                                 else if(value matches """^[A-Z][a-z]+""") "Xx"
+                                 else if(value matches """[A-Z]+""") "XX"
+                                 else "xx"
+
+    val noun_form = getForm(noun)
+
+    val prepObj_form = getForm(prepObj)
+
+    val verb_ending = if(verb.endsWith("ing")) "ing"
+                      else if(verb.endsWith("ed")) "ed"
+                      else if(verb.endsWith("ize")) "ize"
+                      else if(verb.endsWith("ise")) "ise"
+                      else if(verb.endsWith("yze")) "yze"
+                      else if(verb.endsWith("yse")) "yse"
+                      else if(verb.endsWith("ify")) "ify"
+                      else if(verb.endsWith("es")) "es"
+                      else if(verb.endsWith("s")) "s"
+                      else if(verb.endsWith("en")) "en"
+                      else "any"
+    val stem = stemmer(verb)
+
+    val verb_class = bitvectors(verb).keepTopBits(4).toInt.toString
+    val noun_class = bitvectors(noun).keepTopBits(4).toInt.toString
+    val prepObj_class = bitvectors(prepObj).keepTopBits(4).toInt.toString
 
     // Return the features. You should of course add your features to basic ones.
-    basicFeatures
+    basicFeatures ++ List(
+      AttrVal("noun_form", noun_form),
+      AttrVal("prepObj_form", prepObj_form),
+      AttrVal("verb_ending", verb_ending),
+      AttrVal("verb+prep", verb+prep),
+      AttrVal("verb+noun", verb+noun),
+      AttrVal("prep+prepObj", prep+prepObj),
+      AttrVal("verb_stem", stem),
+      AttrVal("verb+prepObj_form", verb+prepObj_form),
+      AttrVal("prep+prepObj_form", prep+prepObj_form),
+      AttrVal("verb+prepObj", verb+prepObj),
+      AttrVal("noun+prepObj_form", noun+prepObj_form),
+      AttrVal("noun_form+verb", noun_form+verb),
+      AttrVal("noun_form+prep", noun_form+prep),
+      AttrVal("noun+prep+prepObj", noun+prep+prepObj),
+      AttrVal("verb_class", verb_class),
+      AttrVal("noun_class", noun_class),
+      AttrVal("prepObj_class", prepObj_class)
+    )
   }
 
 }
